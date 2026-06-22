@@ -1,2 +1,63 @@
-# 3rd_imdc_ceri_returnoftheforecast_bayesian
-3rd Infodengue - Mosqlimate Dengue Challenge in Brazil (IMDC)
+# 3rd IMDC Submission - Team CERI
+
+This repository contains the source code, data preprocessing, and final predictions submitted by Team **CERI** for the **3rd Infodengue–Mosqlimate Dengue Challenge (IMDC) 2026** mandatory challenge (Dengue forecasting at the state level in Brazil).
+
+---
+
+## 1. Team and Contributors
+*   **Team Name:** CERI
+*   **Contributors:** Graeme (Centre for Epidemic Response and Innovation (CERI) / Stellenbosch University)
+
+---
+
+## 2. Repository Structure
+
+A description of the contents and purpose of each directory and file in this repository:
+
+*   `src/`: Core Python source files for preprocessing, model fitting, and formatting.
+    *   `src/bayesian/bayesian_nb_glmm.py`: Implementations of Negative Binomial Generalized Linear Mixed Models (NB-GLMM) in PyTorch. Includes parameters for fixed effects, random intercepts, random seasonal cycles, and spatial ICAR priors.
+    *   `src/models.py`: Python wrapper registering baseline and exploratory models (Historical Median, SARIMA, Ridge, LightGBM, STGCN, and Random Forest).
+    *   `src/preprocess_data.py`: Preprocessing script that aggregates municipality case data to the state level, computes population-weighted climate features, aligns ocean indices, and generates the final dataset.
+    *   `src/evaluate.py`: Retro-validation script to evaluate WIS, MAE, and RMSE across target seasons.
+    *   `src/generate_submissions.py`: Generates standardized submission-ready CSV files containing the predictions and intervals for the 4 validation targets.
+*   `data/submissions/`: Standardized retrospective validation forecast outputs.
+    *   `data/submissions/bayesian_nb_glmm_thermal/`: Submission CSVs containing probabilistic forecasts (median, 50%, 80%, 90%, and 95% prediction intervals) for the 4 retrospective validation targets.
+*   `requirements.txt`: Python package requirements and environment dependencies.
+
+---
+
+## 3. Libraries and Dependencies
+
+All data processing, training, and forecast generation were performed in Python. The key libraries and dependencies are:
+
+*   **PyTorch** (`torch`): Used to optimize model parameters (fixed and random effects) via Maximum A Posteriori (MAP) estimation.
+*   **Pandas & NumPy** (`pandas`, `numpy`): Used for data manipulation, aggregation, and population-weighting calculations.
+*   **SciPy** (`scipy`): Used to draw negative binomial random samples for probabilistic interval and quantile estimations.
+*   **Scikit-learn** (`scikit-learn`): Used for Ridge regression and Random Forest baseline modeling.
+*   **Statsmodels** (`statsmodels`): Used to fit the SARIMA statistical baseline.
+*   **LightGBM** (`lightgbm`): Used for GBDT machine learning baseline modeling.
+*   **PyTorch Geometric** (`torch-geometric`): Used for exploratory GCN message-passing.
+
+---
+
+## 4. Data and Variables
+
+The model utilizes the official open-access challenge datasets, prepared as follows:
+
+*   **Epidemiological Cases:** Dengue probable cases (`casprov`) from Infodengue aggregated to the state (UF) level (excluding Espírito Santo).
+*   **Demographic Offsets:** State populations (from DATASUS) used as log-scale offsets to model incidence rates.
+*   **Population-Weighted Climate Features:** Mean temperature (`temp_med`), minimum temperature (`temp_min`), precipitation (`precip_med`), relative humidity (`rel_humid_med`), and rainy days aggregated using **population-weighted averages** to represent weather exposure in populated areas rather than geographic centroids.
+*   **Ocean Indicators:** ENSO, IOD, and PDO indices aligned to the starting Sunday of each epidemiological week.
+*   **Brière Temperature Suitability:** Transformations applied to minimum and mean temperatures to capture biological limits of vector development ($T_{min} = 13.39^\circ\text{C}$, $T_{max} = 38.46^\circ\text{C}$).
+
+---
+
+## 5. Model Training
+
+Our final submission model is the **Bayesian NB-GLMM (Thermal only, State Masked)**:
+
+*   **Model Framework:** The model is a Negative Binomial Generalized Linear Mixed Model (NB-GLMM) implemented in PyTorch.
+*   **Fixed Effects:** Relies on Brière-transformed temperature suitability (minimum and mean temperatures at optimal lags of 11 and 12 weeks) and Fourier seasonal components to capture non-linear climate suitabilities and global annual cycles.
+*   **Random Effects:** Fits state-specific intercepts and seasonal Fourier cycles via MAP estimation to capture local baseline incidence, climate deviations, and regional variations in seasonality.
+*   **State-Level Hybrid Masking:** The training dataset excludes Zika (2016–2018) and COVID-19 (2019–2021) anomaly periods *only* for the 12 states where anomalies historically degraded forecasting baselines (MG, RJ, SP, RS, SC, GO, MT, BA, PI, AP, PA, RO). The remaining 14 states retain their full history to maximize estimation stability.
+*   **Forecast Generation:** Probabilistic forecast bands are generated by sampling from the fitted negative binomial distribution using the optimized dispersion parameter $\phi$.

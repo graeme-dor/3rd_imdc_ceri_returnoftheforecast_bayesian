@@ -1,0 +1,18 @@
+# Python bytecode/cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env/
+
+# Large local datasets (if added in the future)
+data/data_imdc_2026/
+data/predictions/

@@ -16,7 +16,7 @@ A description of the contents and purpose of each directory and file in this rep
 
 *   `src/`: Core Python source files for preprocessing, model fitting, and formatting.
     *   `src/bayesian/bayesian_nb_glmm.py`: Implementation of the Negative Binomial Generalized Linear Mixed Model (NB-GLMM) in PyTorch. Fits parameters for fixed effects, random state-specific intercepts, and random seasonal cycles.
-    *   `src/models.py`: Python wrapper registering the baseline and final models (Historical Median, SARIMA, and the Bayesian Thermal Model).
+    *   `src/models.py`: Python wrapper registering the final model (Bayesian Thermal Model).
     *   `src/preprocess_data.py`: Preprocessing script that aggregates municipality case data to the state level, computes population-weighted climate features, and generates the final dataset.
     *   `src/evaluate.py`: Retro-validation script to evaluate WIS, MAE, and RMSE across target seasons.
     *   `src/generate_submissions.py`: Generates standardized submission-ready CSV files containing the predictions and intervals for the retrospective validation targets.
@@ -36,7 +36,6 @@ All data processing, training, and forecast generation were performed in Python.
 *   **PyTorch** (`torch`): Used to optimize model parameters (fixed and random effects) via Maximum A Posteriori (MAP) estimation.
 *   **Pandas & NumPy** (`pandas`, `numpy`): Used for data manipulation, aggregation, and formatting.
 *   **SciPy** (`scipy`): Used to draw negative binomial random samples for probabilistic interval and quantile estimations.
-*   **Statsmodels** (`statsmodels`): Used to fit the SARIMA statistical baseline.
 
 ---
 

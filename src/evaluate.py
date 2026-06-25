@@ -107,21 +107,14 @@ def run_validation(model_class, model_name):
     return df_res
 
 if __name__ == '__main__':
-    from models import HistoricalMedianModel, SARIMABaselineModel, BayesianThermalModel
-    from bayesian.bayesian_nb_glmm import PyTorchNBGLMMNoCovariates
+    from models import BayesianThermalModel
     
-    df_res_baseline = run_validation(HistoricalMedianModel, 'baseline_historical_median')
-    df_res_sarima = run_validation(SARIMABaselineModel, 'baseline_sarima')
-    df_res_bayesian_nocov = run_validation(PyTorchNBGLMMNoCovariates, 'bayesian_nb_glmm_no_covariates')
     df_res_bayesian_thermal = run_validation(BayesianThermalModel, 'bayesian_nb_glmm_thermal')
     
     # Print comparison
-    print("\n================ COMPARISON SUMMARY ================")
-    df_all = pd.concat([
-        df_res_baseline, df_res_sarima, df_res_bayesian_nocov, df_res_bayesian_thermal
-    ], ignore_index=True)
-    comparison = df_all.groupby('model')[['wis', 'mae', 'rmse', 'cov_95']].mean()
+    print("\n================ EVALUATION SUMMARY ================")
+    comparison = df_res_bayesian_thermal.groupby('model')[['wis', 'mae', 'rmse', 'cov_95']].mean()
     print(comparison)
-    comparison.to_csv('data/metrics/comparison_summary.csv')
+    comparison.to_csv('data/metrics/bayesian_nb_glmm_thermal_summary.csv')
 
 

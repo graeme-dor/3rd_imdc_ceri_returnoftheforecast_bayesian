@@ -2,7 +2,3 @@ numpy
 pandas
 scipy
 torch
-scikit-learn
-statsmodels
-lightgbm
-torch-geometric

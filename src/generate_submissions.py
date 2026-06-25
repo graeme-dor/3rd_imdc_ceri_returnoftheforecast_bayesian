@@ -64,9 +64,7 @@ def generate_submission_files(model_class, model_name):
         print(f"    Saved submission to {out_path} (shape: {df_sub.shape})")
 
 if __name__ == '__main__':
-    from models import HistoricalMedianModel, SARIMABaselineModel, BayesianThermalModel
+    from models import BayesianThermalModel
     
-    generate_submission_files(HistoricalMedianModel, 'baseline_historical_median')
-    generate_submission_files(SARIMABaselineModel, 'baseline_sarima')
     generate_submission_files(BayesianThermalModel, 'bayesian_nb_glmm_thermal')
 

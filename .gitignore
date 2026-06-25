@@ -17,3 +17,7 @@ env/
 data/data_imdc_2026/
 data/predictions/
 data/metrics/
+
+# Scripts for evaluation and submission (local only)
+src/evaluate.py
+src/generate_submissions.py

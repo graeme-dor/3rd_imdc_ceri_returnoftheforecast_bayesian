@@ -1,6 +1,6 @@
 # 3rd IMDC Submission - Team CERI
 
-This repository contains the source code, data preprocessing, and final predictions submitted by Team **CERI** for the **3rd Infodengue–Mosqlimate Dengue Challenge (IMDC) 2026** (Dengue forecasting at the state level in Brazil).
+This repository contains the source code, data preprocessing, and predictions submitted by Team **CERI** for the **3rd Infodengue–Mosqlimate Dengue Challenge (IMDC) 2026** (Dengue forecasting at the state level in Brazil).
 
 ---
 
@@ -16,8 +16,8 @@ A description of the contents and purpose of each directory and file in this rep
 
 *   `src/`: Core Python source files for preprocessing, model fitting, and formatting.
     *   `src/bayesian/bayesian_nb_glmm.py`: Implementation of the Negative Binomial Generalized Linear Mixed Model (NB-GLMM) in PyTorch. Fits parameters for fixed effects, random state-specific intercepts, and random seasonal cycles.
-    *   `src/models.py`: Python wrapper registering the final model (Bayesian Thermal Model).
-    *   `src/preprocess_data.py`: Preprocessing script that aggregates municipality case data to the state level, computes population-weighted climate features, and generates the final dataset.
+    *   `src/models.py`: Python wrapper registering the Bayesian Thermal Model.
+    *   `src/preprocess_data.py`: Preprocessing script that aggregates municipality case data to the state level, computes population-weighted climate features, and generates the preprocessed dataset.
     *   `src/evaluate.py`: Retro-validation script to evaluate WIS, MAE, and RMSE across target seasons.
     *   `src/generate_submissions.py`: Generates standardized submission-ready CSV files containing the predictions and intervals for the retrospective validation targets.
 *   `data/processed/`: Preprocessed datasets used for training and forecasting.
@@ -59,7 +59,7 @@ The model utilizes the official challenge datasets, prepared as follows:
 
 ## 5. Model Training and Forecasting
 
-Our final model is the **Bayesian Negative Binomial Generalized Linear Mixed Model (NB-GLMM) with Thermal Suitabilities and Climate Covariates**:
+The model is the **Bayesian Negative Binomial Generalized Linear Mixed Model (NB-GLMM) with Thermal Suitabilities and Climate Covariates**:
 
 *   **Model Framework:** Implement a Negative Binomial Generalized Linear Mixed Model (NB-GLMM) in PyTorch.
 *   **Fixed Effects:** Relies on Brière-transformed temperature suitability indices (`ts_min_lag_11`, `ts_med_lag_14`) and other climate covariates (`rainy_days_lag_9`, `rel_humid_med_lag_4`) along with Fourier seasonal components to capture global annual cycles.

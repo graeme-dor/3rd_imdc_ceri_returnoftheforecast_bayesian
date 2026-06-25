@@ -153,36 +153,6 @@ def preprocess():
     # Sort
     df_merged = df_merged.sort_values(['uf', 'date']).reset_index(drop=True)
     
-    # 7. Add human mobility importation risk covariate
-    print("Calculating human mobility importation risk...")
-    import sys
-    if 'src' not in sys.path:
-        sys.path.append('src')
-    from preprocess_mobility import preprocess_mobility
-    preprocess_mobility()
-    
-    # Load mobility matrix
-    df_mob = pd.read_csv('data/processed/state_mobility_matrix.csv', index_col=0)
-    states = sorted(df_merged['uf'].unique())
-    df_mob = df_mob.reindex(index=states, columns=states).fillna(0.0)
-    
-    # Compute incidence (cases / population * 100,000)
-    df_merged['inc'] = (df_merged['casos'] / df_merged['population']) * 100000.0
-    
-    # Pivot incidence
-    df_inc = df_merged.pivot(index='date', columns='uf', values='inc').sort_index()
-    
-    # Compute risk: I_t @ W^T
-    W = df_mob.values
-    df_risk = pd.DataFrame(df_inc.values @ W.T, index=df_inc.index, columns=df_inc.columns)
-    
-    # Melt back
-    df_risk_melted = df_risk.reset_index().melt(id_vars='date', value_name='mobility_import_risk', var_name='uf')
-    
-    # Merge back to df_merged
-    df_merged = pd.merge(df_merged, df_risk_melted, on=['uf', 'date'], how='left')
-    df_merged = df_merged.drop(columns=['inc'])
-    
     # Save the aggregated dataset
     output_path = 'data/processed/state_weekly_features.csv'
     df_merged.to_csv(output_path, index=False)

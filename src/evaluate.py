@@ -107,33 +107,18 @@ def run_validation(model_class, model_name):
     return df_res
 
 if __name__ == '__main__':
-    from models import HistoricalMedianModel, SARIMABaselineModel, GraphSpatioTemporalModel, CovariateModel, GraphLightGBMModel, STGCNModel, PyTorchNBGLMM, PyTorchNBGLMMNoCovariates, PyTorchNBGLMMDataDriven, PyTorchNBGLMMRegionalLags, PyTorchNBGLMMInteractions, BayesianThermalModel, BayesianSpatialThermalModel, BayesianGravityThermalModel, BayesianMobilityThermalModel
+    from models import HistoricalMedianModel, SARIMABaselineModel, BayesianThermalModel
+    from bayesian.bayesian_nb_glmm import PyTorchNBGLMMNoCovariates
     
     df_res_baseline = run_validation(HistoricalMedianModel, 'baseline_historical_median')
     df_res_sarima = run_validation(SARIMABaselineModel, 'baseline_sarima')
-    df_res_graph = run_validation(GraphSpatioTemporalModel, 'graph_spatiotemporal')
-    df_res_lgb = run_validation(GraphLightGBMModel, 'graph_lightgbm')
-    df_res_stgcn = run_validation(STGCNModel, 'graph_stgcn')
-    df_res_cov = run_validation(CovariateModel, 'covariate_random_forest')
-    df_res_bayesian = run_validation(PyTorchNBGLMM, 'bayesian_nb_glmm')
     df_res_bayesian_nocov = run_validation(PyTorchNBGLMMNoCovariates, 'bayesian_nb_glmm_no_covariates')
-    df_res_bayesian_datadriven = run_validation(PyTorchNBGLMMDataDriven, 'bayesian_nb_glmm_datadriven')
-    df_res_bayesian_regional = run_validation(PyTorchNBGLMMRegionalLags, 'bayesian_nb_glmm_regional_lags')
-    df_res_bayesian_interactions = run_validation(PyTorchNBGLMMInteractions, 'bayesian_nb_glmm_interactions')
     df_res_bayesian_thermal = run_validation(BayesianThermalModel, 'bayesian_nb_glmm_thermal')
-    df_res_bayesian_spatial_thermal = run_validation(BayesianSpatialThermalModel, 'bayesian_nb_glmm_spatial_thermal')
-    df_res_bayesian_gravity_thermal = run_validation(BayesianGravityThermalModel, 'bayesian_nb_glmm_gravity_thermal')
-    df_res_bayesian_mobility_thermal = run_validation(BayesianMobilityThermalModel, 'bayesian_nb_glmm_mobility_thermal')
     
     # Print comparison
     print("\n================ COMPARISON SUMMARY ================")
     df_all = pd.concat([
-        df_res_baseline, df_res_sarima, df_res_graph, df_res_lgb, 
-        df_res_stgcn, df_res_cov, df_res_bayesian, df_res_bayesian_nocov,
-        df_res_bayesian_datadriven, df_res_bayesian_regional,
-        df_res_bayesian_interactions, df_res_bayesian_thermal,
-        df_res_bayesian_spatial_thermal, df_res_bayesian_gravity_thermal,
-        df_res_bayesian_mobility_thermal
+        df_res_baseline, df_res_sarima, df_res_bayesian_nocov, df_res_bayesian_thermal
     ], ignore_index=True)
     comparison = df_all.groupby('model')[['wis', 'mae', 'rmse', 'cov_95']].mean()
     print(comparison)

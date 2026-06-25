@@ -16,3 +16,4 @@ env/
 # Large local datasets (if added in the future)
 data/data_imdc_2026/
 data/predictions/
+data/metrics/

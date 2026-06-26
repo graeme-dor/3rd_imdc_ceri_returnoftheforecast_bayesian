@@ -1,12 +1,18 @@
-# 3rd IMDC Submission - Team CERI
+# 3rd IMDC Submission - Team CERI - Return of the Forecast
 
-This repository contains the source code, data preprocessing, and predictions submitted by Team **CERI** for the **3rd Infodengue–Mosqlimate Dengue Challenge (IMDC) 2026** (Dengue forecasting at the state level in Brazil).
+This repository contains the source code, data preprocessing, and predictions submitted by Team **CERI - Return of the Forecast** for the **3rd Infodengue–Mosqlimate Dengue Challenge (IMDC) 2026** (Dengue forecasting at the state level in Brazil).
 
 ---
 
 ## 1. Team and Contributors
-*   **Team Name:** CERI
-*   **Contributors:** Graeme (Centre for Epidemic Response and Innovation (CERI) / Stellenbosch University)
+
+**CERI - Return of the Forecast**
+
+Carlin Foka<sup>1</sup>, Jenicca Poongavanan<sup>1</sup>, Monika Moir<sup>1</sup>, Graeme Dor<sup>1</sup>, Houriiyah Tegally<sup>1</sup>, Isabela Albuquerque<sup>2</sup>, Petar Veličković<sup>2,3</sup>
+
+<sup>1</sup> Centre for Epidemic Response and Innovation (CERI), School of Data Science and Computational Thinking, Stellenbosch University, Stellenbosch, South Africa  
+<sup>2</sup> Google DeepMind  
+<sup>3</sup> University of Cambridge, Cambridge, United Kingdom
 
 ---
 

@@ -16,7 +16,7 @@ def preprocess():
     # 2. Aggregate cases (dengue) to state level
     print("Aggregating dengue cases to state level...")
     # Read dengue cases in chunks to save memory or fully if possible
-    df_dengue = pd.read_csv('data/data_imdc_2026/dengue.csv')
+    df_dengue = pd.read_csv('data/data_imdc_2026/dengue.csv.gz')
     
     # Exclude ES (Espírito Santo)
     df_dengue = df_dengue[df_dengue['uf'] != 'ES'].copy()
@@ -124,13 +124,8 @@ def preprocess():
         # A simpler way is to find the closest Sunday or merge using a date offset
         return dt
     
-    # Let's align ocean date (Monday) to Sunday (which is 6 days later, or 1 day earlier depending on definition).
-    # Standard epiweek in dengue starts on Sunday. Let's find the Sunday of that week.
-    df_ocean['date_dt'] = pd.to_datetime(df_ocean['date'])
-    # Monday is weekday 0. Sunday of the same week is weekday 6 (which is date_dt - 1 day, or start of week).
-    # In IBGE, Sunday is the first day of the week. So the Sunday of the week containing a Monday is Monday - 1 day.
-    df_ocean['date_sunday'] = (df_ocean['date_dt'] - pd.Timedelta(days=1)).dt.strftime('%Y-%m-%d')
-    df_ocean = df_ocean.drop(columns=['date', 'date_dt']).rename(columns={'date_sunday': 'date'})
+    # The new ocean_climate_oscillations dataset already has dates aligned to Sundays.
+    df_ocean['date'] = pd.to_datetime(df_ocean['date']).dt.strftime('%Y-%m-%d')
     print(f"Ocean oscillations shape: {df_ocean.shape}")
     
     # 6. Merge all datasets
